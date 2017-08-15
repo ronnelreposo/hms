@@ -1,0 +1,8 @@
+
+.vs/
+
+#ignore bin directory
+hms_proto/bin
+
+#ignore obj directory
+hms_proto/obj
