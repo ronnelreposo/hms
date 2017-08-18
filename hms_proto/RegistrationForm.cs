@@ -1,5 +1,6 @@
 ﻿using hms_proto.Database;
 using hms_proto.Records;
+using hms_proto.Utils;
 using System;
 using System.Data;
 using System.Linq;
@@ -9,17 +10,12 @@ namespace hms_proto
 {
   public partial class RegistrationForm: Form
   {
-    Func<Label, Label> clearTextBox = Label => { Label.Text = string.Empty; return Label; };
-    void clearAllErrorLabels()
-    {
-      var errorLabels = new[] { errUsername_label, errPassword_label, errConfirmPassword_label };
-      errorLabels.Select(clearTextBox).ToArray();
-    }
-
     public RegistrationForm()
     {
       InitializeComponent();
-      clearAllErrorLabels();
+
+      var errorLabels = new[] { errUsername_label, errPassword_label, errConfirmPassword_label };
+      Util.clearLabels(errorLabels);
     }
 
     bool isValidValuedField(Func<Tuple<Label, string>, bool> Validation,
@@ -38,7 +34,9 @@ namespace hms_proto
 
     private void reg_button_Click(object sender, EventArgs e)
     {
-      clearAllErrorLabels();
+      var errorLabels = new[] { errUsername_label, errPassword_label, errConfirmPassword_label };
+      Util.clearLabels(errorLabels);
+
       var fields = new[] { errUsername_label, errPassword_label, errConfirmPassword_label };
 
       var username = username_tb.Text;
