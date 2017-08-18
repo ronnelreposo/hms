@@ -36,7 +36,7 @@
       this.confirmPassword_tb = new System.Windows.Forms.TextBox();
       this.label3 = new System.Windows.Forms.Label();
       this.errUsername_label = new System.Windows.Forms.Label();
-      this.passwordErr_label = new System.Windows.Forms.Label();
+      this.errPassword_label = new System.Windows.Forms.Label();
       this.errConfirmPassword_label = new System.Windows.Forms.Label();
       this.SuspendLayout();
       // 
@@ -110,15 +110,15 @@
       this.errUsername_label.Text = "Err";
       this.errUsername_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
-      // passwordErr_label
+      // errPassword_label
       // 
-      this.passwordErr_label.AutoSize = true;
-      this.passwordErr_label.Location = new System.Drawing.Point(205, 85);
-      this.passwordErr_label.Name = "passwordErr_label";
-      this.passwordErr_label.Size = new System.Drawing.Size(20, 13);
-      this.passwordErr_label.TabIndex = 8;
-      this.passwordErr_label.Text = "Err";
-      this.passwordErr_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
+      this.errPassword_label.AutoSize = true;
+      this.errPassword_label.Location = new System.Drawing.Point(205, 85);
+      this.errPassword_label.Name = "errPassword_label";
+      this.errPassword_label.Size = new System.Drawing.Size(20, 13);
+      this.errPassword_label.TabIndex = 8;
+      this.errPassword_label.Text = "Err";
+      this.errPassword_label.TextAlign = System.Drawing.ContentAlignment.MiddleLeft;
       // 
       // errConfirmPassword_label
       // 
@@ -136,7 +136,7 @@
       this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
       this.ClientSize = new System.Drawing.Size(316, 182);
       this.Controls.Add(this.errConfirmPassword_label);
-      this.Controls.Add(this.passwordErr_label);
+      this.Controls.Add(this.errPassword_label);
       this.Controls.Add(this.errUsername_label);
       this.Controls.Add(this.confirmPassword_tb);
       this.Controls.Add(this.label3);
@@ -162,7 +162,7 @@
     private System.Windows.Forms.TextBox confirmPassword_tb;
     private System.Windows.Forms.Label label3;
     private System.Windows.Forms.Label errUsername_label;
-    private System.Windows.Forms.Label passwordErr_label;
+    private System.Windows.Forms.Label errPassword_label;
     private System.Windows.Forms.Label errConfirmPassword_label;
   }
 }
