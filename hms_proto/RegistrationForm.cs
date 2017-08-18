@@ -35,9 +35,7 @@ namespace hms_proto
     private void reg_button_Click(object sender, EventArgs e)
     {
       var errorLabels = new[] { errUsername_label, errPassword_label, errConfirmPassword_label };
-      Util.clearLabels(errorLabels);
-
-      var fields = new[] { errUsername_label, errPassword_label, errConfirmPassword_label };
+      var clearedErrorLabels = Util.clearLabels(errorLabels);
 
       var username = username_tb.Text;
       var password = password_tb.Text;
@@ -47,7 +45,7 @@ namespace hms_proto
       Func<string, string> trim = str => str.Trim();
       var values = rawValues.Select(trim);
       
-      var fieldsAndValues = fields.Zip(values, Tuple.Create).ToArray();
+      var fieldsAndValues = clearedErrorLabels.Zip(values, Tuple.Create).ToArray();
       
       Func<Tuple<Label, string>, bool> emptyField = fieldAndValue => string.IsNullOrEmpty(fieldAndValue.Item2);
       Func<string, Func<Label, Label>> changeText = text => label => { label.Text = text; return label; };
