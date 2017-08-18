@@ -18,20 +18,6 @@ namespace hms_proto
       Util.clearLabels(errorLabels);
     }
 
-    bool isValidValuedField(Func<Tuple<Label, string>, bool> Validation,
-      Action<Label[]> OnInValidField,
-      Tuple<Label, string>[] ErrorFieldsAndValues)
-    {
-      var invalidLabels = ErrorFieldsAndValues.Where(Validation);
-      var hasInvalids = invalidLabels.Count() > 0;
-      if (hasInvalids) {
-        Func<Tuple<Label, string>, Label> firstItem = tuple => tuple.Item1;
-        OnInValidField(invalidLabels.Select(firstItem).ToArray());
-        return true;
-      }
-      return false;
-    }
-
     private void reg_button_Click(object sender, EventArgs e)
     {
       var errorLabels = new[] { errUsername_label, errPassword_label, errConfirmPassword_label };
@@ -50,7 +36,7 @@ namespace hms_proto
       Func<Tuple<Label, string>, bool> emptyField = fieldAndValue => string.IsNullOrEmpty(fieldAndValue.Item2);
       Func<string, Func<Label, Label>> changeText = text => label => { label.Text = text; return label; };
       Action<Label[]> showRequiredField = labels => { labels.Select(changeText("is required.")).ToArray(); };
-      var hasOneEmptyFieldValue = isValidValuedField(
+      var hasOneEmptyFieldValue = Util.IsValidValuedField(
         Validation: emptyField,
         OnInValidField: showRequiredField,
         ErrorFieldsAndValues: fieldsAndValues);
@@ -59,7 +45,7 @@ namespace hms_proto
       var MinChars = 6;
       Func<Tuple<Label, string>, bool> shortValueField = fieldAndValue => fieldAndValue.Item2.Length < MinChars;
       Action<Label[]> showShortField = labels => { labels.Select(changeText("is too short.")).ToArray(); };
-      var hasOneShortFieldValue = isValidValuedField(
+      var hasOneShortFieldValue = Util.IsValidValuedField(
         Validation: shortValueField,
         OnInValidField: showShortField,
         ErrorFieldsAndValues: fieldsAndValues);
