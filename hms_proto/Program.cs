@@ -1,12 +1,9 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace hms_proto
 {
-    static class Program
+  static class Program
     {
         /// <summary>
         /// The main entry point for the application.
@@ -16,7 +13,7 @@ namespace hms_proto
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new CustomerForm());
+            Application.Run(new MainForm());
         }
     }
 }
