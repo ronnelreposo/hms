@@ -83,7 +83,7 @@
             this.main_tabControl.Location = new System.Drawing.Point(12, 12);
             this.main_tabControl.Name = "main_tabControl";
             this.main_tabControl.SelectedIndex = 0;
-            this.main_tabControl.Size = new System.Drawing.Size(887, 335);
+            this.main_tabControl.Size = new System.Drawing.Size(664, 335);
             this.main_tabControl.TabIndex = 0;
             // 
             // walkIn_tab
@@ -99,7 +99,7 @@
             this.walkIn_tab.Location = new System.Drawing.Point(4, 22);
             this.walkIn_tab.Name = "walkIn_tab";
             this.walkIn_tab.Padding = new System.Windows.Forms.Padding(3);
-            this.walkIn_tab.Size = new System.Drawing.Size(879, 309);
+            this.walkIn_tab.Size = new System.Drawing.Size(656, 309);
             this.walkIn_tab.TabIndex = 0;
             this.walkIn_tab.Text = "Walk In";
             this.walkIn_tab.UseVisualStyleBackColor = true;
@@ -219,13 +219,14 @@
             this.walkIn_checkIn_button.TabIndex = 1;
             this.walkIn_checkIn_button.Text = "Check In";
             this.walkIn_checkIn_button.UseVisualStyleBackColor = true;
+            this.walkIn_checkIn_button.Click += new System.EventHandler(this.walkIn_checkIn_button_Click);
             // 
             // walkIn_dataGridView
             // 
             this.walkIn_dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.walkIn_dataGridView.Location = new System.Drawing.Point(327, 6);
             this.walkIn_dataGridView.Name = "walkIn_dataGridView";
-            this.walkIn_dataGridView.Size = new System.Drawing.Size(546, 297);
+            this.walkIn_dataGridView.Size = new System.Drawing.Size(323, 297);
             this.walkIn_dataGridView.TabIndex = 0;
             // 
             // reservation_tab
@@ -241,7 +242,7 @@
             this.reservation_tab.Location = new System.Drawing.Point(4, 22);
             this.reservation_tab.Name = "reservation_tab";
             this.reservation_tab.Padding = new System.Windows.Forms.Padding(3);
-            this.reservation_tab.Size = new System.Drawing.Size(879, 309);
+            this.reservation_tab.Size = new System.Drawing.Size(656, 309);
             this.reservation_tab.TabIndex = 1;
             this.reservation_tab.Text = "Reservation";
             this.reservation_tab.UseVisualStyleBackColor = true;
@@ -331,7 +332,7 @@
             this.customers_tab.Controls.Add(this.customers_dataGridView);
             this.customers_tab.Location = new System.Drawing.Point(4, 22);
             this.customers_tab.Name = "customers_tab";
-            this.customers_tab.Size = new System.Drawing.Size(879, 309);
+            this.customers_tab.Size = new System.Drawing.Size(656, 309);
             this.customers_tab.TabIndex = 2;
             this.customers_tab.Text = "Customers";
             this.customers_tab.UseVisualStyleBackColor = true;
@@ -438,7 +439,7 @@
             // 
             this.AutoScaleDimensions = new System.Drawing.SizeF(6F, 13F);
             this.AutoScaleMode = System.Windows.Forms.AutoScaleMode.Font;
-            this.ClientSize = new System.Drawing.Size(911, 359);
+            this.ClientSize = new System.Drawing.Size(688, 359);
             this.Controls.Add(this.main_tabControl);
             this.Name = "MainForm";
             this.Text = "HMS";

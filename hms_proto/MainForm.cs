@@ -1,12 +1,7 @@
-﻿using hms_proto.Records;
+﻿using hms_proto.Controller;
+using hms_proto.Records;
 using System;
 using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace hms_proto
@@ -17,36 +12,32 @@ namespace hms_proto
         {
             InitializeComponent();
 
-            var roomDatabase = new List<Room> {
+            var rooms = new List<Room> {
                 new Room { No = 101, Type = RoomType.Ordinary, Status = RoomStatus.Vacant },
                 new Room { No = 103, Type = RoomType.Deluxe, Status = RoomStatus.Vacant },
                 new Room { No = 105, Type = RoomType.Ordinary, Status = RoomStatus.Occupied },
                 new Room { No = 109, Type = RoomType.Ordinary, Status = RoomStatus.Vacant }
             };
 
-            loadVacantRooms(roomDatabase, walkIn_dataGridView);
+            MainController.LoadVacantRooms(Rooms: rooms, DataGridView: walkIn_dataGridView);
         }
 
-        Func<DataTable, string, DataTable> dataTableColumnAdder = (dataTable, heading) => { dataTable.Columns.Add(heading); return dataTable; };
-        Func<DataTable, string[], DataTable> dataTableRowAdder = (dataTable, row) => { dataTable.Rows.Add(row); return dataTable; };
-        Func<Room, bool> vacantRoom = room => room.Status == RoomStatus.Vacant;
-        Func<Room, string[]> toRow = room => new[] { room.No.ToString(), room.Type.ToString(), room.Status.ToString() };
-
-        DataTable loadDataTableHeadings(DataTable dataTable, string[] headings) => headings.Aggregate(dataTable, dataTableColumnAdder);
-        DataTable loadDataTableRows(DataTable dataTable, string[][] rows) => rows.Aggregate(dataTable, dataTableRowAdder);
-        string[][] toVacantRooms(List<Room> rooms) => rooms.Where(vacantRoom).Select(toRow).ToArray();
-
-        DataGridView loadVacantRooms(List<Room> rooms, DataGridView dataGridView)
-        {
-            var vacantRooms = toVacantRooms(rooms);
-            var headings = new[] { "No", "Type", "Status" };
-            var dataTableWithHeadings = loadDataTableHeadings(new DataTable(), headings);
-            var dataTableWithRows = loadDataTableRows(dataTableWithHeadings, vacantRooms);
-
-            dataGridView.DataSource = dataTableWithRows.DefaultView;
-            return dataGridView;
-        }
-
-
+        private void walkIn_checkIn_button_Click(object sender, EventArgs e) =>
+            MainController.Transact(
+                IsReviewed: walkIn_review_checkBox.Checked,
+                Book: new Book
+                {
+                    Room = new Room { No = 101, Status = RoomStatus.Occupied, Type = RoomType.Deluxe },
+                    Customer = new Customer
+                    {
+                        FirstName = MainController.SetDefault(firstname_tb.Text.Trim()),
+                        LastName = MainController.SetDefault(lastname_tb.Text.Trim()),
+                        Phone = MainController.SetDefault(phone_textBox.Text.Trim())
+                    },
+                    DateIn = DateTime.Now,
+                    DateOut = walkIn_dateOut_dateTimePicker.Value
+                },
+                OnReviewCompleted: (message, heading) => MessageBox.Show(message, heading),
+                OnCompleted: (message) => MessageBox.Show(message));
     }
 }
