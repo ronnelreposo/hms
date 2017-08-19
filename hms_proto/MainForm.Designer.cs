@@ -223,11 +223,18 @@
             // 
             // walkIn_dataGridView
             // 
+            this.walkIn_dataGridView.AllowUserToAddRows = false;
+            this.walkIn_dataGridView.AllowUserToDeleteRows = false;
+            this.walkIn_dataGridView.AllowUserToResizeRows = false;
             this.walkIn_dataGridView.ColumnHeadersHeightSizeMode = System.Windows.Forms.DataGridViewColumnHeadersHeightSizeMode.AutoSize;
             this.walkIn_dataGridView.Location = new System.Drawing.Point(327, 6);
+            this.walkIn_dataGridView.MultiSelect = false;
             this.walkIn_dataGridView.Name = "walkIn_dataGridView";
+            this.walkIn_dataGridView.ReadOnly = true;
+            this.walkIn_dataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.walkIn_dataGridView.Size = new System.Drawing.Size(323, 297);
             this.walkIn_dataGridView.TabIndex = 0;
+            this.walkIn_dataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.walkIn_dataGridView_CellClick);
             // 
             // reservation_tab
             // 
