@@ -3,7 +3,6 @@ using hms_proto.Records;
 using System;
 using System.Collections.Generic;
 using System.Data;
-using System.Diagnostics.Contracts;
 using System.Linq;
 using System.Threading.Tasks;
 using System.Windows.Forms;
@@ -32,42 +31,14 @@ namespace hms_proto.Controller
                 .ToRoom();
         }
 
-        /* this happens because, we can't set DataColumnCollection. */
-        internal static DataColumnCollection with(this DataColumnCollection ThisColumnCollection, DataColumnCollection ColumnCollection, int i = 0)
-        {
-            if (i > (ColumnCollection.Count - 1)) return ThisColumnCollection;
-            ThisColumnCollection.Add(ColumnCollection[i]);
-            return with(ThisColumnCollection, ColumnCollection, (i + 1));
-        }
-        internal static DataRowCollection with(this DataRowCollection ThisRowCollection, DataRowCollection RowCollection, int i = 0)
-        {
-            if (i > (RowCollection.Count - 1)) return ThisRowCollection;
-            ThisRowCollection.Add(RowCollection[i]);
-            return with(ThisRowCollection, RowCollection, (i + 1));
-        }
-        
-        internal static DataTable with(this DataTable dt, DataColumnCollection dcc)
-        {
-            dt.Columns.with(dcc);
-            return dt;
-        }
-        internal static DataTable with(this DataTable dt, DataRowCollection drc)
-        {
-            dt.Rows.with(drc);
-            return dt;
-        }
-
         internal static DataTable LoadVacantRooms(IEnumerable<Room> rooms, DataTable dataTable)
         {
-            var columns = new DataTable().Columns.Add("No", "Type", "Status");
+            var columns = dataTable.Columns.Add("No", "Type", "Status");
             var rows = rooms.Where(room => room.IsVacant())
                 .Select(room => room.ToStringArray())
                 .ToArray()
-                .Aggregate(new DataTable().Rows, DataRowCollectionExt.AddRow);
-
-            //var x = new DataColumnCollection[] { };
-
-            return dataTable.with(columns).with(rows);
+                .Aggregate(dataTable.Rows, DataRowCollectionExt.AddRow);
+            return dataTable;
         } /* end Load Vacant Rooms. */
 
         internal static async Task<DataTable> LoadVacantRoomsAsync(IEnumerable<Room> rooms, DataTable dataTable)
