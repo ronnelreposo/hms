@@ -3,7 +3,9 @@ using hms_proto.Records;
 using System;
 using System.Collections.Generic;
 using System.Data;
+using System.Diagnostics.Contracts;
 using System.Linq;
+using System.Threading.Tasks;
 using System.Windows.Forms;
 
 namespace hms_proto.Controller
@@ -24,36 +26,52 @@ namespace hms_proto.Controller
             var selectedRows = DataGridView.SelectedRows;
             var hasSelectedRow = selectedRows.Count == 0;
             if (hasSelectedRow) { return Room; }
-            var firstSelectedRow = selectedRows[0];
-            var cells = firstSelectedRow.Cells;
-            var data = cells.ToArray<string>();
-            return data.ToRoom();
+            return selectedRows[0]
+                .Cells
+                .ToArray()
+                .ToRoom();
         }
 
-        internal static Func<Room, bool> VacantRoom = room => room.Status == RoomStatus.Vacant;
-        internal static Func<Room, string[]> ToArray = room => new[] { room.No.ToString(), room.Type.ToString(), room.Status.ToString() };
-
-        /// <summary>
-        /// Load Vacant Rooms to DataGridView.
-        /// </summary>
-        /// <param name="Rooms"></param>
-        /// <param name="DataGridView"></param>
-        /// <returns></returns>
-        internal static DataGridView LoadVacantRooms(IEnumerable<Room> Rooms, DataGridView DataGridView)
+        /* this happens because, we can't set DataColumnCollection. */
+        internal static DataColumnCollection with(this DataColumnCollection ThisColumnCollection, DataColumnCollection ColumnCollection, int i = 0)
         {
-            var headings = new[] { "No", "Type", "Status" };
+            if (i > (ColumnCollection.Count - 1)) return ThisColumnCollection;
+            ThisColumnCollection.Add(ColumnCollection[i]);
+            return with(ThisColumnCollection, ColumnCollection, (i + 1));
+        }
+        internal static DataRowCollection with(this DataRowCollection ThisRowCollection, DataRowCollection RowCollection, int i = 0)
+        {
+            if (i > (RowCollection.Count - 1)) return ThisRowCollection;
+            ThisRowCollection.Add(RowCollection[i]);
+            return with(ThisRowCollection, RowCollection, (i + 1));
+        }
+        
+        internal static DataTable with(this DataTable dt, DataColumnCollection dcc)
+        {
+            dt.Columns.with(dcc);
+            return dt;
+        }
+        internal static DataTable with(this DataTable dt, DataRowCollection drc)
+        {
+            dt.Rows.with(drc);
+            return dt;
+        }
 
-            var dt = new DataTable();
-            dt.Columns.Add(headings);
-
-            var rows = Rooms.Where(VacantRoom)
-                .Select(ToArray)
+        internal static DataTable LoadVacantRooms(IEnumerable<Room> rooms, DataTable dataTable)
+        {
+            var columns = new DataTable().Columns.Add("No", "Type", "Status");
+            var rows = rooms.Where(room => room.IsVacant())
+                .Select(room => room.ToStringArray())
                 .ToArray()
-                .Aggregate(dt.Rows, DataRowCollectionExt.AddRow);
+                .Aggregate(new DataTable().Rows, DataRowCollectionExt.AddRow);
 
-            DataGridView.DataSource = dt.DefaultView;
-            return DataGridView;
+            //var x = new DataColumnCollection[] { };
+
+            return dataTable.with(columns).with(rows);
         } /* end Load Vacant Rooms. */
+
+        internal static async Task<DataTable> LoadVacantRoomsAsync(IEnumerable<Room> rooms, DataTable dataTable)
+            => await Task.Run(() => LoadVacantRooms(rooms, dataTable));
 
         /// <summary>
         /// Transact Booking for Walk-In.

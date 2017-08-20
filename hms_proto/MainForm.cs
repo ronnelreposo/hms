@@ -4,23 +4,22 @@ using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
 using hms_proto.Extensions;
+using System.Data;
 
 namespace hms_proto
 {
     public partial class MainForm: Form
     {
         List<Room> rooms = new List<Room> {
-                new Room { No = 101, Type = RoomType.Ordinary, Status = RoomStatus.Vacant },
-                new Room { No = 103, Type = RoomType.Deluxe, Status = RoomStatus.Vacant },
-                new Room { No = 105, Type = RoomType.Ordinary, Status = RoomStatus.Occupied },
-                new Room { No = 109, Type = RoomType.Ordinary, Status = RoomStatus.Vacant }
+            new Room { No = 101, Type = RoomType.Ordinary, Status = RoomStatus.Vacant },
+            new Room { No = 103, Type = RoomType.Deluxe, Status = RoomStatus.Vacant },
+            new Room { No = 105, Type = RoomType.Ordinary, Status = RoomStatus.Occupied },
+            new Room { No = 109, Type = RoomType.Ordinary, Status = RoomStatus.Vacant }
         };
 
         public MainForm()
         {
             InitializeComponent();
-
-            MainController.LoadVacantRooms(Rooms: rooms, DataGridView: walkIn_dataGridView);
         }
 
         private void walkIn_checkIn_button_Click(object sender, EventArgs e)
@@ -63,5 +62,10 @@ namespace hms_proto
                 .ToRoom()
                 .No
                 .ToString();
+
+        private async void MainForm_Load(object sender, EventArgs e)
+        {
+            walkIn_dataGridView.DataSource = await MainController.LoadVacantRoomsAsync(rooms: rooms, dataTable: new DataTable());
+        }  
     }
 }

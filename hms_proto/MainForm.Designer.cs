@@ -450,6 +450,7 @@
             this.Controls.Add(this.main_tabControl);
             this.Name = "MainForm";
             this.Text = "HMS";
+            this.Load += new System.EventHandler(this.MainForm_Load);
             this.main_tabControl.ResumeLayout(false);
             this.walkIn_tab.ResumeLayout(false);
             this.walkIn_tab.PerformLayout();

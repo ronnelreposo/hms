@@ -19,5 +19,7 @@ namespace hms_proto.Extensions
                 accumulation: accumulateSeed,
                 collection: Collection);
         }
+
+        internal static string[] ToArray(this DataGridViewCellCollection Collection) => Collection.ToArray<string>();
     }
 }

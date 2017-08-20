@@ -52,6 +52,7 @@
     <Compile Include="Extensions\DataColumnCollectionExt.cs" />
     <Compile Include="Extensions\DataGridViewCellCollectionExt.cs" />
     <Compile Include="Extensions\DataRowCollectionExt.cs" />
+    <Compile Include="Extensions\RoomExt.cs" />
     <Compile Include="Extensions\StringExt.cs" />
     <Compile Include="MainForm.cs">
       <SubType>Form</SubType>
