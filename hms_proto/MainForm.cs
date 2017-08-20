@@ -31,9 +31,9 @@ namespace hms_proto
                 Room = MainController.DefaultRoom(Room: rooms[0], DataGridView: walkIn_dataGridView),
                 Customer = new Customer
                 {
-                    FirstName = firstname_tb.Text.Trim().IfNullOrEmptyReplace(NotAvail),
-                    LastName = lastname_tb.Text.Trim().IfNullOrEmptyReplace(NotAvail),
-                    Phone = phone_textBox.Text.Trim().IfNullOrEmptyReplace(NotAvail)
+                    FirstName = firstname_tb.Text.Trim()._(NotAvail),
+                    LastName = lastname_tb.Text.Trim()._(NotAvail),
+                    Phone = phone_textBox.Text.Trim()._(NotAvail)
                 },
                 DateIn = DateTime.Now,
                 DateOut = walkIn_dateOut_dateTimePicker.Value
@@ -55,15 +55,13 @@ namespace hms_proto
             onFail("failure message");
         };
 
-        void walkIn_dataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
-        {
-            var firstSelectedRows = walkIn_dataGridView.SelectedRows[0];
-            var room = firstSelectedRows
+        void walkIn_dataGridView_CellClick(object sender, DataGridViewCellEventArgs e) =>
+            walkIn_roomNo_label.Text = ((DataGridView)sender)
+                .SelectedRows[0]
                 .Cells
                 .ToArray<string>()
-                .ToRoom();
-
-            walkIn_roomNo_label.Text = room.No.ToString();
-        }
+                .ToRoom()
+                .No
+                .ToString();
     }
 }
