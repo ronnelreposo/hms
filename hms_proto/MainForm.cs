@@ -3,6 +3,7 @@ using hms_proto.Records;
 using System;
 using System.Collections.Generic;
 using System.Windows.Forms;
+using hms_proto.Extensions;
 
 namespace hms_proto
 {
@@ -24,14 +25,15 @@ namespace hms_proto
 
         private void walkIn_checkIn_button_Click(object sender, EventArgs e)
         {
+            const string NotAvail = "Not Available";
             var book = new Book
             {
                 Room = MainController.DefaultRoom(Room: rooms[0], DataGridView: walkIn_dataGridView),
                 Customer = new Customer
                 {
-                    FirstName = MainController.SetDefault(firstname_tb.Text.Trim()),
-                    LastName = MainController.SetDefault(lastname_tb.Text.Trim()),
-                    Phone = MainController.SetDefault(phone_textBox.Text.Trim())
+                    FirstName = firstname_tb.Text.Trim().IfNullOrEmptyReplace(NotAvail),
+                    LastName = lastname_tb.Text.Trim().IfNullOrEmptyReplace(NotAvail),
+                    Phone = phone_textBox.Text.Trim().IfNullOrEmptyReplace(NotAvail)
                 },
                 DateIn = DateTime.Now,
                 DateOut = walkIn_dateOut_dateTimePicker.Value
@@ -55,9 +57,12 @@ namespace hms_proto
 
         void walkIn_dataGridView_CellClick(object sender, DataGridViewCellEventArgs e)
         {
-            var selectedCells = walkIn_dataGridView.SelectedRows[0].Cells;
-            var data = MainController.DataGridViewCellCollectionToArray<string>(selectedCells);
-            var room = MainController.ToRoom(data);
+            var firstSelectedRows = walkIn_dataGridView.SelectedRows[0];
+            var room = firstSelectedRows
+                .Cells
+                .ToArray<string>()
+                .ToRoom();
+
             walkIn_roomNo_label.Text = room.No.ToString();
         }
     }
