@@ -44,8 +44,8 @@ namespace hms_proto
             MainController.Transact(
                 IsReviewed: walkIn_review_checkBox.Checked,
                 Book: book,
-                OnReviewCompleted: (message, heading) => savedBook(() => MessageBox.Show(message, heading))(err => MessageBox.Show(err)),
-                OnCompleted: (message) => savedBook(() => MessageBox.Show(message))(err => MessageBox.Show(err)));
+                OnReviewCompleted: (message, heading) => savedBook(() => MessageBox.Show(message, heading)) (err => MessageBox.Show(err)),
+                OnCompleted: (message) => savedBook(() => MessageBox.Show(message)) (err => MessageBox.Show(err)));
         }
 
         Func<Book, Func<Action, Action<Action<string>>>> saveBook = book => onSuccess => onFail =>
