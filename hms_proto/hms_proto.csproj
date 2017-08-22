@@ -47,6 +47,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Database\AccountDatabase.cs" />
+    <Compile Include="Extensions\LabelExt.cs" />
     <Compile Include="SignInForm.cs">
       <SubType>Form</SubType>
     </Compile>
