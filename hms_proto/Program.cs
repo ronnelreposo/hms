@@ -3,7 +3,7 @@ using System.Windows.Forms;
 
 namespace hms_proto
 {
-    static class Program
+  static class Program
     {
         /// <summary>
         /// The main entry point for the application.
@@ -13,7 +13,7 @@ namespace hms_proto
         {
             Application.EnableVisualStyles();
             Application.SetCompatibleTextRenderingDefault(false);
-            Application.Run(new SignInForm());
+            Application.Run(new CustomerForm());
         }
     }
 }
