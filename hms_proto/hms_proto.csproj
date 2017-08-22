@@ -46,8 +46,10 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Controllers\SignInController.cs" />
     <Compile Include="Database\AccountDatabase.cs" />
     <Compile Include="Extensions\LabelExt.cs" />
+    <Compile Include="Records\SignInControls.cs" />
     <Compile Include="SignInForm.cs">
       <SubType>Form</SubType>
     </Compile>
