@@ -71,7 +71,7 @@
     <EmbeddedResource Include="SignInForm.resx">
       <DependentUpon>SignInForm.cs</DependentUpon>
     </EmbeddedResource>
-    <Compile Include="Controller\MainController.cs" />
+    <Compile Include="Controllers\MainController.cs" />
     <Compile Include="Extensions\ArrayExt.cs" />
     <Compile Include="Extensions\Collection.cs" />
     <Compile Include="Extensions\DataColumnCollectionExt.cs" />
@@ -85,7 +85,6 @@
     <Compile Include="MainForm.Designer.cs">
       <DependentUpon>MainForm.cs</DependentUpon>
     </Compile>
-    
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
@@ -115,7 +114,6 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Controllers\" />
     <Folder Include="Views\" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
