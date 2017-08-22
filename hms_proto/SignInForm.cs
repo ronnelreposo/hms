@@ -23,7 +23,9 @@ namespace hms_proto
                 UserNameField = username_tb,
                 PasswordField = password_tb,
                 UserNameError = errUsername_label,
-                PasswrodError = errPassword_label
+                PasswrodError = errPassword_label,
+                ThisForm = this,
+                MainForm = new MainForm()
             });
         }
 

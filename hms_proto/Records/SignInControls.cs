@@ -5,7 +5,6 @@ namespace hms_proto.Records
     internal class SignInControls
     {
         internal Form ThisForm {get; set;}
-        internal Form RegisterForm { get; set; }
         internal Form MainForm { get; set; }
         internal TextBox UserNameField { get; set; }
         internal TextBox PasswordField { get; set; }

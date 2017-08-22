@@ -63,6 +63,6 @@ namespace hms_proto.Controllers
 
             controls.MainForm.Show();
             controls.ThisForm.Hide();
-        }
+        } /* end Sign In. */
     }
 }
