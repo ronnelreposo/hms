@@ -65,11 +65,8 @@
     <Compile Include="Records\Book.cs" />
     <Compile Include="Records\Customer.cs" />
     <Compile Include="Records\Room.cs" />
-<<<<<<< HEAD
-=======
     <Compile Include="Records\RoomStatus.cs" />
     <Compile Include="Records\RoomType.cs" />
->>>>>>> anonymous
     <EmbeddedResource Include="MainForm.resx">
       <DependentUpon>MainForm.cs</DependentUpon>
     </EmbeddedResource>
