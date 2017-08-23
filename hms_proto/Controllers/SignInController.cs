@@ -6,18 +6,14 @@ using hms_proto.Extensions;
 using hms_proto.Records;
 using hms_proto.Database;
 
-namespace hms_proto.Controllers
-{
-    
-
-    static class SignInController
-    {
+namespace hms_proto.Controllers {
+    static class SignInController {
         /// <summary>
         /// This method performs step by step side effect in signing in.
         /// </summary>
         /// <param name="controls">The input controls.</param>
-        internal static void SignIn(SignInControls controls)
-        {
+        internal static void SignIn(SignInControls controls) {
+
             var clearedErrorLabels = Util.clearLabels(controls.ErrorLabels);
 
             var username = controls.UserNameField.Text;
@@ -29,9 +25,10 @@ namespace hms_proto.Controllers
 
             var fieldsAndValues = clearedErrorLabels.Zip(values, Tuple.Create).ToArray();
 
-            #region Check Has Empty Fields.
-            Func<Tuple<Label, string>, bool> emptyField = fieldAndValue => string.IsNullOrEmpty(fieldAndValue.Item2);
             Func<string, Func<Label, Label>> changeText = text => label => label.ChangeText(text);
+
+            #region Check Has Empty Fields.
+            Func<Tuple<Label, string>, bool> emptyField = fieldAndValue => !fieldAndValue.Item2.HasValue();
             Action<Label[]> showRequiredField = labels => labels.Select(changeText("is required.")).ToArray();
             if (Util.IsValidValuedField(
               Validation: emptyField,
@@ -41,7 +38,7 @@ namespace hms_proto.Controllers
 
             #region Check Has Min Chars.
             var MinChars = 6;
-            Func<Tuple<Label, string>, bool> shortValueField = fieldAndValue => fieldAndValue.Item2.Length < MinChars;
+            Func<Tuple<Label, string>, bool> shortValueField = fieldAndValue => fieldAndValue.Item2.IsLengthLessThan(MinChars);
             Action<Label[]> showShortField = labels => labels.Select(changeText("is too short.")).ToArray();
             if (Util.IsValidValuedField(
               Validation: shortValueField,
@@ -61,8 +58,11 @@ namespace hms_proto.Controllers
             controls.Fields.Select(clearTextBox).ToArray();
             #endregion
 
+            #region Continuation
             controls.MainForm.Show();
             controls.ThisForm.Hide();
+            #endregion
+
         } /* end Sign In. */
     }
 }

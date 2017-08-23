@@ -1,15 +1,10 @@
 ﻿using hms_proto.Controllers;
-using hms_proto.Database;
-using hms_proto.Extensions;
 using hms_proto.Records;
 using hms_proto.Utils;
 using System;
-using System.Data;
-using System.Linq;
 using System.Windows.Forms;
 
-namespace hms_proto
-{
+namespace hms_proto {
     public partial class SignInForm: Form
     {
         public SignInForm()
