@@ -2,8 +2,14 @@
 {
     internal struct Room
     {
-        internal int No { get; set; }
-        internal RoomType Type { get; set; }
-        internal RoomStatus Status { get; set; }
+        internal int No { get; private set; }
+        internal RoomType Type { get; private set; }
+        internal RoomStatus Status { get; private set; }
+        internal Room(int No, RoomType Type, RoomStatus Status)
+        {
+            this.No = No;
+            this.Type = Type;
+            this.Status = Status;
+        }
     }
 }

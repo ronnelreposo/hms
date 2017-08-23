@@ -11,10 +11,10 @@ namespace hms_proto
     public partial class MainForm: Form
     {
         List<Room> rooms = new List<Room> {
-            new Room { No = 101, Type = RoomType.Ordinary, Status = RoomStatus.Vacant },
-            new Room { No = 103, Type = RoomType.Deluxe, Status = RoomStatus.Vacant },
-            new Room { No = 105, Type = RoomType.Ordinary, Status = RoomStatus.Occupied },
-            new Room { No = 109, Type = RoomType.Ordinary, Status = RoomStatus.Vacant }
+            new Room(No: 101, Type: RoomType.Ordinary, Status: RoomStatus.Vacant),
+            new Room(No: 103, Type: RoomType.Deluxe, Status: RoomStatus.Vacant),
+            new Room(No: 105, Type: RoomType.Ordinary, Status: RoomStatus.Occupied),
+            new Room(No: 109, Type: RoomType.Ordinary, Status: RoomStatus.Vacant)
         };
 
         public MainForm()
@@ -22,21 +22,17 @@ namespace hms_proto
             InitializeComponent();
         }
 
+        readonly string NotAvail = "Not Available";
         private void walkIn_checkIn_button_Click(object sender, EventArgs e)
         {
-            const string NotAvail = "Not Available";
-            var book = new Book
-            {
-                Room = MainController.DefaultRoom(Room: rooms[0], DataGridView: walkIn_dataGridView),
-                Customer = new Customer
-                {
-                    FirstName = firstname_tb.Text.Trim()._(NotAvail),
-                    LastName = lastname_tb.Text.Trim()._(NotAvail),
-                    Phone = phone_textBox.Text.Trim()._(NotAvail)
-                },
-                DateIn = DateTime.Now,
-                DateOut = walkIn_dateOut_dateTimePicker.Value
-            };
+            var book = new Book(
+                Room: MainController.DefaultRoom(Room: rooms[0], DataGridView: walkIn_dataGridView),
+                Customer: new Customer(
+                    FirstName: firstname_tb.Text.Trim()._(NotAvail),
+                    LastName: lastname_tb.Text.Trim()._(NotAvail),
+                    Phone: phone_textBox.Text.Trim()._(NotAvail)),
+                DateIn: DateTime.Now,
+                DateOut: walkIn_dateOut_dateTimePicker.Value);
 
             var savedBook = saveBook(book);
 

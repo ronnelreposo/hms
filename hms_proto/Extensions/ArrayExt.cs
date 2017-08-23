@@ -8,13 +8,13 @@ namespace hms_proto.Extensions
     {
         internal static Room ToRoom(this string[] Data)
         {
-            #region PostConditions
+            #region PreConditions
             Contract.Requires(Data != null);
             Contract.Requires(Data.Length > 3);
             Contract.Requires(!string.IsNullOrEmpty(Data[0]));
             Contract.Requires(!string.IsNullOrEmpty(Data[1]));
             Contract.Requires(!string.IsNullOrEmpty(Data[2]));
-            #endregion PostConditions
+            #endregion PreConditions
 
             RoomType roomType;
             Enum.TryParse(value: Data[1], result: out roomType);
@@ -22,11 +22,10 @@ namespace hms_proto.Extensions
             RoomStatus status;
             Enum.TryParse(value: Data[2], result: out status);
 
-            return new Room {
-                No = Convert.ToInt16(Data[0]),
-                Type = roomType,
-                Status = status
-            };
+            return new Room(
+                No: Convert.ToInt16(Data[0]),
+                Type: roomType,
+                Status: status);
         }
     }
 }

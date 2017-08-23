@@ -13,14 +13,13 @@ namespace hms_proto {
         }
 
         void signIn_button_Click(object sender, EventArgs e) =>
-            SignInController.SignIn(new SignInControls {
-                UserNameField = username_tb,
-                PasswordField = password_tb,
-                UserNameError = errUsername_label,
-                PasswrodError = errPassword_label,
-                ThisForm = this,
-                MainForm = new MainForm()
-            });
+            SignInController.SignIn(new SignInControls(
+                UserNameField: username_tb,
+                PasswordField: password_tb,
+                UserNameError: errUsername_label,
+                PasswordError: errPassword_label,
+                ThisForm: this,
+                MainForm: new MainForm()));
 
         void register_button_Click(object sender, EventArgs e) => new RegistrationForm().ShowDialog();
         void SignInForm_Load(object sender, EventArgs e) => Util.clearLabels(errUsername_label, errPassword_label);

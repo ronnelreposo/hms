@@ -68,7 +68,7 @@ namespace hms_proto.Controllers
 
             if ( hasLessInputFields(fieldsAndValues) ) return;
 
-            var account = new Account { Username = username, Password = password };
+            var account = new Account(Username: username, Password: password);
             var Accounts = AccountDatabase.Accounts;
             if ( AccountExist(account, Accounts) ) { MessageBox.Show("Your account is not registered."); return; }
 

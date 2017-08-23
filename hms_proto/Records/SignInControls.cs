@@ -2,14 +2,14 @@
 
 namespace hms_proto.Records
 {
-    internal class SignInControls
+    struct SignInControls
     {
-        internal Form ThisForm {get; set;}
-        internal Form MainForm { get; set; }
-        internal TextBox UserNameField { get; set; }
-        internal TextBox PasswordField { get; set; }
-        internal Label UserNameError { get; set; }
-        internal Label PasswrodError { get; set; }
+        internal Form ThisForm {get; private set;}
+        internal Form MainForm { get; private set; }
+        internal TextBox UserNameField { get; private set; }
+        internal TextBox PasswordField { get; private set; }
+        internal Label UserNameError { get; private set; }
+        internal Label PasswordError { get; private set; }
 
         internal TextBox[] Fields
         {
@@ -18,7 +18,22 @@ namespace hms_proto.Records
 
         internal Label[] ErrorLabels
         {
-            get { return new[] { UserNameError, PasswrodError }; }
+            get { return new[] { UserNameError, PasswordError }; }
+        }
+
+        internal SignInControls(Form ThisForm,
+            Form MainForm,
+            TextBox UserNameField,
+            TextBox PasswordField,
+            Label UserNameError,
+            Label PasswordError)
+        {
+            this.ThisForm = ThisForm;
+            this.MainForm = MainForm;
+            this.UserNameField = UserNameField;
+            this.PasswordField = PasswordField;
+            this.UserNameError = UserNameError;
+            this.PasswordError = PasswordError;
         }
     }
 }
