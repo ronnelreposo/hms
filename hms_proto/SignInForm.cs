@@ -12,8 +12,7 @@ namespace hms_proto {
             InitializeComponent();
         }
 
-        void signIn_button_Click(object sender, EventArgs e)
-        {
+        void signIn_button_Click(object sender, EventArgs e) =>
             SignInController.SignIn(new SignInControls {
                 UserNameField = username_tb,
                 PasswordField = password_tb,
@@ -22,7 +21,6 @@ namespace hms_proto {
                 ThisForm = this,
                 MainForm = new MainForm()
             });
-        }
 
         void register_button_Click(object sender, EventArgs e) => new RegistrationForm().ShowDialog();
         void SignInForm_Load(object sender, EventArgs e) => Util.clearLabels(errUsername_label, errPassword_label);

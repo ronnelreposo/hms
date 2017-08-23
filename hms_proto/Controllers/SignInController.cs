@@ -5,15 +5,54 @@ using System.Windows.Forms;
 using hms_proto.Extensions;
 using hms_proto.Records;
 using hms_proto.Database;
+using System.Collections.Generic;
 
-namespace hms_proto.Controllers {
-    static class SignInController {
+namespace hms_proto.Controllers
+{
+    static class SignInController
+    {
+
+        static readonly int MinChars = 6;
+        static Func<string, Func<Label, Label>> changeText = text => label => label.ChangeText(text);
+
+        static bool hasEmptyFields (Tuple<Label, string>[] fieldsAndValues)
+        {
+            Func<Tuple<Label, string>, bool> emptyField = fieldAndValue => !fieldAndValue.Item2.HasValue();
+            Action<Label[]> showRequiredField = labels => labels.Select(changeText("is required.")).ToArray();
+            return Util.IsValidValuedField(
+              Validation: emptyField,
+              OnInValidField: showRequiredField,
+              ErrorFieldsAndValues: fieldsAndValues);
+        }
+
+        static bool hasLessInputFields (Tuple<Label, string>[] fieldsAndValues)
+        {
+            Func<Tuple<Label, string>, bool> shortValueField = fieldAndValue => fieldAndValue.Item2.IsLengthLessThan(MinChars);
+            Action<Label[]> showShortField = labels => labels.Select(changeText("is too short.")).ToArray();
+            return Util.IsValidValuedField(
+              Validation: shortValueField,
+              OnInValidField: showShortField,
+              ErrorFieldsAndValues: fieldsAndValues);
+        }
+
+        static bool AccountExist (Account account, List<Account> accountList)
+        {
+            Predicate<Account> matchUsername = _ => true; /* temporary */
+            return accountList.Exists(matchUsername);
+        }
+
+        static TextBox[] clearAllTextBox(TextBox[] textboxes)
+        {
+            Func<TextBox, TextBox> clearTextBox = TextBox => { TextBox.Clear(); return TextBox; };
+            return textboxes.Select(clearTextBox).ToArray();
+        }
+
         /// <summary>
         /// This method performs step by step side effect in signing in.
         /// </summary>
         /// <param name="controls">The input controls.</param>
-        internal static void SignIn(SignInControls controls) {
-
+        internal static void SignIn (SignInControls controls)
+        {
             var clearedErrorLabels = Util.clearLabels(controls.ErrorLabels);
 
             var username = controls.UserNameField.Text;
@@ -25,44 +64,20 @@ namespace hms_proto.Controllers {
 
             var fieldsAndValues = clearedErrorLabels.Zip(values, Tuple.Create).ToArray();
 
-            Func<string, Func<Label, Label>> changeText = text => label => label.ChangeText(text);
+            if ( hasEmptyFields(fieldsAndValues) ) return;
 
-            #region Check Has Empty Fields.
-            Func<Tuple<Label, string>, bool> emptyField = fieldAndValue => !fieldAndValue.Item2.HasValue();
-            Action<Label[]> showRequiredField = labels => labels.Select(changeText("is required.")).ToArray();
-            if (Util.IsValidValuedField(
-              Validation: emptyField,
-              OnInValidField: showRequiredField,
-              ErrorFieldsAndValues: fieldsAndValues)) return;
-            #endregion
+            if ( hasLessInputFields(fieldsAndValues) ) return;
 
-            #region Check Has Min Chars.
-            var MinChars = 6;
-            Func<Tuple<Label, string>, bool> shortValueField = fieldAndValue => fieldAndValue.Item2.IsLengthLessThan(MinChars);
-            Action<Label[]> showShortField = labels => labels.Select(changeText("is too short.")).ToArray();
-            if (Util.IsValidValuedField(
-              Validation: shortValueField,
-              OnInValidField: showShortField,
-              ErrorFieldsAndValues: fieldsAndValues)) return;
-            #endregion check has min chars.
-
-            #region Check Account Existence.
             var account = new Account { Username = username, Password = password };
             var Accounts = AccountDatabase.Accounts;
-            Predicate<Account> matchUsername = acc => acc.Username.Equals(acc.Username);
-            if (!Accounts.Exists(matchUsername)) { MessageBox.Show("Your account is not registered."); return; }
-            #endregion check account existence.
+            if ( AccountExist(account, Accounts) ) { MessageBox.Show("Your account is not registered."); return; }
 
-            #region Clear All Textbox Contents.
-            Func<TextBox, TextBox> clearTextBox = TextBox => { TextBox.Clear(); return TextBox; };
-            controls.Fields.Select(clearTextBox).ToArray();
-            #endregion
+            clearAllTextBox(controls.Fields);
 
             #region Continuation
             controls.MainForm.Show();
             controls.ThisForm.Hide();
             #endregion
-
         } /* end Sign In. */
     }
 }
