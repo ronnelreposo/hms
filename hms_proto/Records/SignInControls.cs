@@ -1,4 +1,5 @@
-﻿using System.Windows.Forms;
+﻿using System;
+using System.Windows.Forms;
 
 namespace hms_proto.Records
 {
@@ -13,12 +14,21 @@ namespace hms_proto.Records
 
         internal TextBox[] Fields
         {
-            get { return new[] { UserNameField, PasswordField }; }
+            
+            get {
+                var field = new[] { UserNameField, PasswordField };
+                var copy = field.Clone();
+                return (TextBox[]) copy;
+            }
         }
 
         internal Label[] ErrorLabels
         {
-            get { return new[] { UserNameError, PasswordError }; }
+            get {
+                var field = new[] { UserNameError, PasswordError };
+                var copy = field.Clone();
+                return (Label[]) copy;
+            }
         }
 
         internal SignInControls(Form ThisForm,
