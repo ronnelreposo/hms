@@ -13,7 +13,7 @@ namespace hms_proto {
         }
 
         void signIn_button_Click(object sender, EventArgs e) =>
-            SignInController.SignIn(new SignInControls(
+            AccountController.SignIn(new SignInControls(
                 UserNameField: username_tb,
                 PasswordField: password_tb,
                 UserNameError: errUsername_label,
