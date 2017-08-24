@@ -22,6 +22,6 @@ namespace hms_proto {
                 MainForm: new MainForm()));
 
         void register_button_Click(object sender, EventArgs e) => new RegistrationForm().ShowDialog();
-        void SignInForm_Load(object sender, EventArgs e) => Util.clearLabels(errUsername_label, errPassword_label);
+        protected override void OnLoad(EventArgs _) => Util.clearLabels(errUsername_label, errPassword_label);
     }
 }

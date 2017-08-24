@@ -10,18 +10,18 @@ namespace hms_proto
 {
     public partial class RegistrationForm : Form
     {
+        private Label[] ErrLabels { get; set; }
         public RegistrationForm ()
         {
             InitializeComponent();
 
-            var errorLabels = new[] { errUsername_label, errPassword_label, errConfirmPassword_label };
-            Util.clearLabels(errorLabels);
+            ErrLabels = new[] { errUsername_label, errPassword_label, errConfirmPassword_label };
+            Util.clearLabels(ErrLabels);
         }
 
         private void reg_button_Click (object sender, EventArgs e)
         {
-            var errorLabels = new[] { errUsername_label, errPassword_label, errConfirmPassword_label };
-            var clearedErrorLabels = Util.clearLabels(errorLabels);
+            var clearedErrorLabels = Util.clearLabels(ErrLabels);
 
             var username = username_tb.Text;
             var password = password_tb.Text;
@@ -87,6 +87,5 @@ namespace hms_proto
             #endregion
 
         } /* end register event. */
-
     }
 }

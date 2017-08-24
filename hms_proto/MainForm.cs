@@ -8,7 +8,7 @@ using System.Data;
 
 namespace hms_proto
 {
-    public partial class MainForm: Form
+    public partial class MainForm : Form
     {
         List<Room> rooms = new List<Room> {
             new Room(No: 101, Type: RoomType.Ordinary, Status: RoomStatus.Vacant),
@@ -17,13 +17,13 @@ namespace hms_proto
             new Room(No: 109, Type: RoomType.Ordinary, Status: RoomStatus.Vacant)
         };
 
-        public MainForm()
+        public MainForm ()
         {
             InitializeComponent();
         }
 
         readonly string NotAvail = "Not Available";
-        private void walkIn_checkIn_button_Click(object sender, EventArgs e)
+        private void walkIn_checkIn_button_Click (object sender, EventArgs e)
         {
             var book = new Book(
                 Room: MainController.DefaultRoom(Room: rooms[0], DataGridView: walkIn_dataGridView),
@@ -39,8 +39,8 @@ namespace hms_proto
             MainController.Transact(
                 IsReviewed: walkIn_review_checkBox.Checked,
                 Book: book,
-                OnReviewCompleted: (message, heading) => savedBook(() => MessageBox.Show(message, heading)) (err => MessageBox.Show(err)),
-                OnCompleted: (message) => savedBook(() => MessageBox.Show(message)) (err => MessageBox.Show(err)));
+                OnReviewCompleted: (message, heading) => savedBook(() => MessageBox.Show(message, heading))(err => MessageBox.Show(err)),
+                OnCompleted: (message) => savedBook(() => MessageBox.Show(message))(err => MessageBox.Show(err)));
         }
 
         Func<Book, Func<Action, Action<Action<string>>>> saveBook = book => onSuccess => onFail =>
@@ -50,8 +50,8 @@ namespace hms_proto
             onFail("failure message");
         };
 
-        void walkIn_dataGridView_CellClick(object sender, DataGridViewCellEventArgs e) =>
-            walkIn_roomNo_label.Text = ((DataGridView)sender)
+        void walkIn_dataGridView_CellClick (object sender, DataGridViewCellEventArgs e) =>
+            walkIn_roomNo_label.Text = ( sender as DataGridView )
                 .SelectedRows[0]
                 .Cells
                 .ToArray<string>()
@@ -59,9 +59,7 @@ namespace hms_proto
                 .No
                 .ToString();
 
-        private async void MainForm_Load(object sender, EventArgs e)
-        {
-            walkIn_dataGridView.DataSource = await MainController.LoadVacantRoomsAsync(rooms: rooms, dataTable: new DataTable());
-        }  
+        protected override async void OnLoad (EventArgs _) =>
+            await MainController.LoadVacantRoomsAsync(rooms: rooms, dataTable: new DataTable());
     }
 }
