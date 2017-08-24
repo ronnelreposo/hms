@@ -13,7 +13,7 @@ namespace hms_proto.Controllers
     {
         static bool AccountExist (Account account, List<Account> accountList)
         {
-            Predicate<Account> matchUsername = _ => true; /* temporary */
+            Predicate<Account> matchUsername = savedAccount => savedAccount.Equals(account);
             return accountList.Exists(matchUsername);
         }
 
@@ -106,7 +106,7 @@ namespace hms_proto.Controllers
 
             var account = new Account(Username: username, Password: password);
             var Accounts = AccountDatabase.Accounts;
-            if ( AccountExist(account, Accounts) ) { MessageBox.Show("Your account is not registered."); return; }
+            if ( !AccountExist(account, Accounts) ) { MessageBox.Show("Your account is not registered."); return; }
 
             clearAllTextBox(controls.Fields);
 

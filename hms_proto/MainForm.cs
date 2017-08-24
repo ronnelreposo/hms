@@ -59,7 +59,10 @@ namespace hms_proto
                 .No
                 .ToString();
 
-        protected override async void OnLoad (EventArgs _) =>
-            await MainController.LoadVacantRoomsAsync(rooms: rooms, dataTable: new DataTable());
+        protected override async void OnLoad (EventArgs _)
+        {
+            var vacantRooms = await MainController.LoadVacantRoomsAsync(rooms: rooms, dataTable: new DataTable());
+            walkIn_dataGridView.DataSource = vacantRooms.DefaultView;
+        }
     }
 }
