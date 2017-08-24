@@ -15,5 +15,7 @@ namespace hms_proto.Records
             this.DateIn = DateIn;
             this.DateOut = DateOut;
         }
+        public override string ToString () =>
+            string.Format($"Book\n{Room.ToString()},\n{Customer.ToString()},\n@{DateIn.ToString()}-{DateOut.ToString()}");
     }
 }

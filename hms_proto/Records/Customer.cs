@@ -11,5 +11,6 @@
             this.LastName = LastName;
             this.Phone = Phone;
         }
+        public override string ToString () => string.Format($"Customer LastName:{LastName}, FirstName:{FirstName}");
     }
 }

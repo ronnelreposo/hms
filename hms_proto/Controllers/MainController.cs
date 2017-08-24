@@ -56,15 +56,7 @@ namespace hms_proto.Controller
             var transactCompleted = "Transaction Completed";
             var notReviewed = !IsReviewed;
             if (notReviewed) { OnCompleted(transactCompleted); return; }
-            string message =
-                $"Date In: { Book.DateIn }\n" +
-                $"Date Out: { Book.DateOut }\n" +
-                $"Room No: { Book.Room.No }\n" +
-                $"Room Type: { Book.Room.Type }\n" +
-                $"Cust First Name: { Book.Customer.FirstName }\n" +
-                $"Cust Last Name: { Book.Customer.LastName }\n" +
-                $"Cust Phone: { Book.Customer.Phone }";
-            OnReviewCompleted(message, transactCompleted);
+            OnReviewCompleted(Book.ToString(), transactCompleted);
         } /*end Transact */
     }
 }

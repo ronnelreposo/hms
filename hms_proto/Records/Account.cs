@@ -9,5 +9,6 @@
             this.Username = Username;
             this.Password = Password;
         }
+        public override string ToString () => $"Account Username: {Username}";
     }
 }
