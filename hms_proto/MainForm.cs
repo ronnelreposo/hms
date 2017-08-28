@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using hms_proto.Extensions;
 using System.Data;
+using hms_proto.Core;
 
 namespace hms_proto
 {
@@ -28,27 +29,22 @@ namespace hms_proto
             var book = new Book(
                 Room: MainController.DefaultRoom(Room: rooms[0], DataGridView: walkIn_dataGridView),
                 Customer: new Customer(
-                    FirstName: firstname_tb.Text.Trim()._(NotAvail),
-                    LastName: lastname_tb.Text.Trim()._(NotAvail),
-                    Phone: phone_textBox.Text.Trim()._(NotAvail)),
+                    FirstName: firstname_tb.Text.Trim().OrWithValue(NotAvail),
+                    LastName: lastname_tb.Text.Trim().OrWithValue(NotAvail),
+                    Phone: phone_textBox.Text.Trim().OrWithValue(NotAvail)),
                 DateIn: DateTime.Now,
                 DateOut: walkIn_dateOut_dateTimePicker.Value);
 
-            var savedBook = saveBook(book);
+            /* *** On Functional Reactive. */
+            //var savedBook = saveBook(book);
+            //MainController.Transact( 
+            //    IsReviewed: walkIn_review_checkBox.Checked,
+            //    Book: book,
+            //    OnReviewCompleted: (message, heading) => MessageBoxExt.Show(message, heading),
+            //    OnCompleted: message => MessageBoxExt.Show(message));
 
-            MainController.Transact(
-                IsReviewed: walkIn_review_checkBox.Checked,
-                Book: book,
-                OnReviewCompleted: (message, heading) => savedBook(() => MessageBox.Show(message, heading))(err => MessageBox.Show(err)),
-                OnCompleted: (message) => savedBook(() => MessageBox.Show(message))(err => MessageBox.Show(err)));
+            MessageBox.Show(book.ToString());
         }
-
-        Func<Book, Func<Action, Action<Action<string>>>> saveBook = book => onSuccess => onFail =>
-        {
-            MainController.bookDatabase.Add(book);
-            onSuccess();
-            onFail("failure message");
-        };
 
         void walkIn_dataGridView_CellClick (object sender, DataGridViewCellEventArgs e) =>
             walkIn_roomNo_label.Text = ( sender as DataGridView )

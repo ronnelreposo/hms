@@ -1,4 +1,5 @@
-﻿using hms_proto.Extensions;
+﻿using hms_proto.Core;
+using hms_proto.Extensions;
 using hms_proto.Records;
 using System;
 using System.Collections.Generic;
@@ -48,15 +49,16 @@ namespace hms_proto.Controller
         /// Transact Booking for Walk-In.
         /// </summary>
         /// <param name="IsReviewed"></param>
-        /// <param name="Book"></param>
-        /// <param name="OnReviewCompleted"></param>
-        /// <param name="OnCompleted"></param>
-        internal static void Transact(bool IsReviewed, Book Book, Action<string, string> OnReviewCompleted, Action<string> OnCompleted)
+        /// <param name="Book">The Book Record.</param>
+        /// <param name="OnReviewCompleted">The action upon review completion.</param>
+        /// <param name="OnCompleted">The action upon completion.</param>
+        /// <returns>Unit</returns>
+        internal static Unit Transact(bool IsReviewed, Book Book, Func<string, string, Unit> OnReviewCompleted, Func<string, Unit> OnCompleted)
         {
             var transactCompleted = "Transaction Completed";
             var notReviewed = !IsReviewed;
-            if (notReviewed) { OnCompleted(transactCompleted); return; }
-            OnReviewCompleted(Book.ToString(), transactCompleted);
+            if (notReviewed) { OnCompleted(transactCompleted); return Unit.Unit; }
+            return OnReviewCompleted(Book.ToString(), transactCompleted);
         } /*end Transact */
     }
 }

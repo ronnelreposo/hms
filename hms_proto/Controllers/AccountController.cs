@@ -6,6 +6,7 @@ using hms_proto.Extensions;
 using hms_proto.Records;
 using hms_proto.Database;
 using System.Collections.Generic;
+using hms_proto.Core;
 
 namespace hms_proto.Controllers
 {
@@ -33,8 +34,9 @@ namespace hms_proto.Controllers
         /// <summary>
         /// This method performs step by step side effect in registration.
         /// </summary>
-        /// <param name="controls"></param>
-        internal static void Register (RegisterControls controls)
+        /// <param name="controls">The Form Controls.</param>
+        /// <returns>Unit</returns>
+        internal static Unit Register (RegisterControls controls)
         {
             var clearedErrorLabels = Util.clearLabels(controls.ErrorLabels);
 
@@ -46,16 +48,16 @@ namespace hms_proto.Controllers
 
             var fieldsAndValues = FieldsAndValues(fields: clearedErrorLabels, values: rawValues);
 
-            if ( Validator.hasEmptyFields(fieldsAndValues) ) return;
+            if ( Validator.hasEmptyFields(fieldsAndValues) ) return Unit.Unit;
 
-            if ( Validator.hasLessInputFields(fieldsAndValues) ) return;
+            if ( Validator.hasLessInputFields(fieldsAndValues) ) return Unit.Unit;
 
             #region Ensures that the password confirmation matches.
             var passwordConfirmationMatched = password.Equals(passwordConfirmation);
             if ( !passwordConfirmationMatched )
             {
                 MessageBox.Show("Your password confirmation did not match.");
-                return;
+                return Unit.Unit;
             }
             #endregion end password match confirmation.
 
@@ -67,7 +69,7 @@ namespace hms_proto.Controllers
             if ( isAccountExist )
             {
                 MessageBox.Show("Username is already registered. Please pick another one.");
-                return;
+                return Unit.Unit;
             }
             #endregion isAccountExist condition.
 
@@ -83,13 +85,16 @@ namespace hms_proto.Controllers
             Func<TextBox, TextBox> clearTextBox = TextBox => { TextBox.Clear(); return TextBox; };
             controls.Fields.Select(clearTextBox).ToArray();
             #endregion
+
+            return Unit.Unit;
         } /* end Registration. */
 
         /// <summary>
         /// This method performs step by step side effect in signing in.
         /// </summary>
         /// <param name="controls">The input controls.</param>
-        internal static void SignIn (SignInControls controls)
+        /// <returns>Unit</returns>
+        internal static Unit SignIn (SignInControls controls)
         {
             var clearedErrorLabels = Util.clearLabels(controls.ErrorLabels);
 
@@ -100,19 +105,19 @@ namespace hms_proto.Controllers
 
             var fieldsAndValues = FieldsAndValues(fields: clearedErrorLabels, values: rawValues);
 
-            if ( Validator.hasEmptyFields(fieldsAndValues) ) return;
+            if ( Validator.hasEmptyFields(fieldsAndValues) ) return Unit.Unit;
 
-            if ( Validator.hasLessInputFields(fieldsAndValues) ) return;
+            if ( Validator.hasLessInputFields(fieldsAndValues) ) return Unit.Unit;
 
             var account = new Account(Username: username, Password: password);
             var Accounts = AccountDatabase.Accounts;
-            if ( !AccountExist(account, Accounts) ) { MessageBox.Show("Your account is not registered."); return; }
+            if ( !AccountExist(account, Accounts) ) { MessageBox.Show("Your account is not registered."); return Unit.Unit; }
 
             clearAllTextBox(controls.Fields);
 
             #region Continuation
-            controls.MainForm.Show();
-            controls.ThisForm.Hide();
+            controls.MainForm.UShow();
+            return controls.ThisForm.UHide();
             #endregion
         } /* end Sign In. */
     }

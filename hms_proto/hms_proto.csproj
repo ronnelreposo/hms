@@ -48,8 +48,11 @@
   <ItemGroup>
     <Compile Include="Controllers\AccountController.cs" />
     <Compile Include="Controllers\Validator.cs" />
+    <Compile Include="Core\Unit.cs" />
     <Compile Include="Database\AccountDatabase.cs" />
+    <Compile Include="Extensions\FormExt.cs" />
     <Compile Include="Extensions\LabelExt.cs" />
+    <Compile Include="Extensions\MessageBoxExt.cs" />
     <Compile Include="Records\RegisterControls.cs" />
     <Compile Include="Records\SignInControls.cs" />
     <Compile Include="SignInForm.cs">

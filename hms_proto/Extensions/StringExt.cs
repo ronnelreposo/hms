@@ -8,7 +8,7 @@
         /// <param name="str">The given string.</param>
         /// <param name="Default">The default string.</param>
         /// <returns></returns>
-        internal static string _(this string str, string Default) => string.IsNullOrEmpty(str) ? Default : str;
+        internal static string OrWithValue(this string str, string Default) => string.IsNullOrEmpty(str) ? Default : str;
         /// <summary>
         /// Determines if the length of the string is less than the given threshold.
         /// </summary>
