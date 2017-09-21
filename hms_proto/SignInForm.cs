@@ -14,34 +14,27 @@ namespace hms_proto {
         {
             InitializeComponent();
 
-            var sThisLoad = Observable.FromEventPattern(this, "Load");
-            sThisLoad.Subscribe(_ => Util.clearLabels(errUsername_label, errPassword_label));
-            sThisLoad.Subscribe(_ => signIn_button.Enabled = false);
-
             const int Threshold = 6;
             const string Required = "Required";
             var ShortValue = $"Must at least {Threshold} characters.";
 
             Func<string, string> hasStrError = str => str.HasValue() ?  ( str.IsLengthLessThan(Threshold) ? ShortValue : string.Empty ) : Required;
 
-            var sUsernameError = username_tb
-                .StreamStringTextChanged()
-                .Select(hasStrError);
-
+            var sUsernameError = username_tb.StreamStringTextChanged().Select(hasStrError);
             sUsernameError.Subscribe(str => errUsername_label.Text = str);
 
-            var sPasswordError = password_tb
-                .StreamStringTextChanged()
-                .Select(hasStrError);
-
+            var sPasswordError = password_tb.StreamStringTextChanged().Select(hasStrError);
             sPasswordError.Subscribe(str => errPassword_label.Text = str);
 
             Func<string, bool> hasError = err => err.Equals(string.Empty);
-
-            var sHasNoError = sUsernameError.Select(hasError)
+            var sHasNoError = sUsernameError
+                .Select(hasError)
                 .CombineLatest(sPasswordError.Select(hasError), (a, b) => a && b);
-
             sHasNoError.Subscribe(hasNoError => signIn_button.Enabled = hasNoError);
+
+            var sEventThisLoad = this.StreamEventLoad();
+            sEventThisLoad.Subscribe(_ => Util.clearLabels(errUsername_label, errPassword_label));
+            sEventThisLoad.Subscribe(_ => signIn_button.Enabled = false);
 
             var sExist = signIn_button
                 .StreamClick()
@@ -56,11 +49,10 @@ namespace hms_proto {
             sAccountExist.Subscribe(_ => new MainForm().UShow());
             sAccountExist.Subscribe(_ => this.UHide());
 
-            var sRegisterButtonClick = register_button
+            register_button
                 .StreamClick()
                 .Select(_ => new RegistrationForm())
                 .Subscribe(form => form.UShowDialog());
-
         } /* end constructor. */
     } /* end class. */
 }
