@@ -1,6 +1,7 @@
 ﻿using hms_proto.Controllers;
 using hms_proto.Records;
 using hms_proto.Utils;
+using hms_proto.Extensions;
 using System;
 using System.Reactive.Linq;
 using System.Windows.Forms;
@@ -18,9 +19,7 @@ namespace hms_proto
             var sThisLoad = Observable.FromEventPattern(this, "Load");
             sThisLoad.Subscribe(_ => Util.clearLabels(errLabels));
 
-            var sRegButtonClick = Observable.FromEventPattern(reg_button, "Click");
-            sRegButtonClick.Subscribe(_ =>
-            AccountController.Register(new RegisterControls(
+            var controls = new RegisterControls(
                 ThisForm: this,
                 MainForm: new MainForm(),
                 UserNameField: username_tb,
@@ -28,7 +27,11 @@ namespace hms_proto
                 ConfirmPasswordField: confirmPassword_tb,
                 UserNameError: errUsername_label,
                 PasswordError: errPassword_label,
-                ConfirmPasswordError: errConfirmPassword_label)));
+                ConfirmPasswordError: errConfirmPassword_label);
+
+            var sRegButtonClick = reg_button
+                .StreamClick()
+                .Subscribe(_ => AccountController.Register(controls));
 
         } /* end constructor.*/
     } /* end class.*/

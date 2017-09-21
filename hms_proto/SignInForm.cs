@@ -7,6 +7,7 @@ using System.Reactive.Linq;
 using hms_proto.Database;
 
 namespace hms_proto {
+
     public partial class SignInForm: Form
     {
         public SignInForm ()
@@ -15,43 +16,48 @@ namespace hms_proto {
 
             var sThisLoad = Observable.FromEventPattern(this, "Load");
             sThisLoad.Subscribe(_ => Util.clearLabels(errUsername_label, errPassword_label));
-
-            var sSignInButtonClick = Observable.FromEventPattern(signIn_button, "Click");
-
-            var sUsernameHasValue = sSignInButtonClick.Select(_ => username_tb.Text.HasValue());
-            var sPasswordHasValue = sSignInButtonClick.Select(_ => password_tb.Text.HasValue());
+            sThisLoad.Subscribe(_ => signIn_button.Enabled = false);
 
             const int Threshold = 6;
+            const string Required = "Required";
+            var ShortValue = $"Must at least {Threshold} characters.";
 
-            var sUsernameIsShort = sSignInButtonClick.Select(_ => username_tb.Text.IsLengthLessThan(Threshold));
-            var sPasswordIsShort = sSignInButtonClick.Select(_ => password_tb.Text.IsLengthLessThan(Threshold));
+            Func<string, string> hasStrError = str => str.HasValue() ?  ( str.IsLengthLessThan(Threshold) ? ShortValue : string.Empty ) : Required;
 
-            Func<bool, bool, string> noValueOrIsShortError = (hasValue, isShort) => hasValue ? isShort ? $"Must at least {Threshold} characters." : string.Empty : "Required";
+            var sUsernameError = username_tb
+                .StreamStringTextChanged()
+                .Select(hasStrError);
 
-            var sUsernameHasValueOrNotShort = sUsernameHasValue.CombineLatest(sUsernameIsShort, noValueOrIsShortError);
-            sUsernameHasValueOrNotShort.Subscribe(err => errUsername_label.Text = err);
+            sUsernameError.Subscribe(str => errUsername_label.Text = str);
 
-            var sPasswordHasValueOrNotShort = sPasswordHasValue.CombineLatest(sPasswordIsShort, noValueOrIsShortError);
-            sPasswordHasValueOrNotShort.Subscribe(err => errPassword_label.Text = err);
+            var sPasswordError = password_tb
+                .StreamStringTextChanged()
+                .Select(hasStrError);
 
-            var sExist = sSignInButtonClick
-                .Where(_ =>
-                    username_tb.Text.HasValue() &&
-                    password_tb.Text.HasValue() &&
-                    !username_tb.Text.IsLengthLessThan(Threshold) &&
-                    !password_tb.Text.IsLengthLessThan(Threshold))
+            sPasswordError.Subscribe(str => errPassword_label.Text = str);
+
+            Func<string, bool> hasError = err => err.Equals(string.Empty);
+
+            var sHasNoError = sUsernameError.Select(hasError)
+                .CombineLatest(sPasswordError.Select(hasError), (a, b) => a && b);
+
+            sHasNoError.Subscribe(hasNoError => signIn_button.Enabled = hasNoError);
+
+            var sExist = signIn_button
+                .StreamClick()
                 .Select(_ => Account.Create(Username: username_tb.Text, Password: password_tb.Text))
                 .Select(account => AccountDatabase.Accounts.Exists(account_ => account_.Equals(account)));
 
-            var sNotExist = sExist.Where(accountExist => accountExist.Equals(false));
-            sNotExist.Subscribe(_ => password_tb.Clear());
-            sNotExist.Subscribe(_ => MessageBox.Show("Your account is not registered."));
+            var sAccountNonExist = sExist.Where(accountExist => accountExist.Equals(false));
+            sAccountNonExist.Subscribe(_ => password_tb.Clear());
+            sAccountNonExist.Subscribe(_ => MessageBox.Show("Your account is not registered."));
 
-            var exist = sExist.Where(accountExist => accountExist.Equals(true));
-            exist.Subscribe(_ => new MainForm().UShow());
-            exist.Subscribe(_ => this.UHide());
+            var sAccountExist = sExist.Where(accountExist => accountExist.Equals(true));
+            sAccountExist.Subscribe(_ => new MainForm().UShow());
+            sAccountExist.Subscribe(_ => this.UHide());
 
-            var sRegisterButtonClick = Observable.FromEventPattern(register_button, "Click")
+            var sRegisterButtonClick = register_button
+                .StreamClick()
                 .Select(_ => new RegistrationForm())
                 .Subscribe(form => form.UShowDialog());
 
