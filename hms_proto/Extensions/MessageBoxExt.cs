@@ -1,4 +1,4 @@
-﻿using hms_proto.Core;
+﻿using System.Reactive;
 using System.Windows.Forms;
 
 namespace hms_proto.Extensions
@@ -9,7 +9,7 @@ namespace hms_proto.Extensions
         internal static Unit Show(string message, string caption = emptyString)
         {
             MessageBox.Show(message, caption);
-            return Unit.Unit;
+            return Unit.Default;
         }
     }
 }

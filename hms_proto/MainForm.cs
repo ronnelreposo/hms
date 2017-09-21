@@ -5,7 +5,7 @@ using System.Collections.Generic;
 using System.Windows.Forms;
 using hms_proto.Extensions;
 using System.Data;
-using hms_proto.Core;
+using System.Reactive.Linq;
 
 namespace hms_proto
 {
@@ -26,7 +26,7 @@ namespace hms_proto
         readonly string NotAvail = "Not Available";
         private void walkIn_checkIn_button_Click (object sender, EventArgs e)
         {
-            var book = new Book(
+            var book = new Book( /* investigate this.. */
                 Room: MainController.DefaultRoom(Room: rooms[0], DataGridView: walkIn_dataGridView),
                 Customer: new Customer(
                     FirstName: firstname_tb.Text.Trim().OrWithValue(NotAvail),
@@ -44,21 +44,19 @@ namespace hms_proto
             //    OnCompleted: message => MessageBoxExt.Show(message));
 
             MessageBox.Show(book.ToString());
-        }
 
-        void walkIn_dataGridView_CellClick (object sender, DataGridViewCellEventArgs e) =>
-            walkIn_roomNo_label.Text = ( sender as DataGridView )
-                .SelectedRows[0]
-                .Cells
-                .ToArray<string>()
-                .ToRoom()
-                .No
-                .ToString();
+            var sThisLoad = Observable.FromEventPattern(this, "Load");
+            sThisLoad.Subscribe(async _ => /* *** refactor this.*/
+            {
+                var vacantRooms = await MainController.LoadVacantRoomsAsync(rooms: rooms, dataTable: new DataTable());
+                walkIn_dataGridView.DataSource = vacantRooms.DefaultView;
+            });
+                
 
-        protected override async void OnLoad (EventArgs _)
-        {
-            var vacantRooms = await MainController.LoadVacantRoomsAsync(rooms: rooms, dataTable: new DataTable());
-            walkIn_dataGridView.DataSource = vacantRooms.DefaultView;
-        }
-    }
+            var sWalkInDataGridViewCellClick = Observable.FromEventPattern(walkIn_dataGridView, "CellClick");
+            sWalkInDataGridViewCellClick
+                .Select(evt => ( evt.Sender as DataGridView ).SelectedRows[0].Cells.ToArray<string>().ToRoom().No.ToString())
+                .Subscribe(value => walkIn_roomNo_label.Text = value);
+        } /* end constructor. */
+    } /*end class. */
 }

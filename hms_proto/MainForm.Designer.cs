@@ -234,7 +234,6 @@
             this.walkIn_dataGridView.SelectionMode = System.Windows.Forms.DataGridViewSelectionMode.FullRowSelect;
             this.walkIn_dataGridView.Size = new System.Drawing.Size(323, 297);
             this.walkIn_dataGridView.TabIndex = 0;
-            this.walkIn_dataGridView.CellClick += new System.Windows.Forms.DataGridViewCellEventHandler(this.walkIn_dataGridView_CellClick);
             // 
             // reservation_tab
             // 

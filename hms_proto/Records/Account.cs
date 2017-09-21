@@ -9,6 +9,8 @@
             this.Username = Username;
             this.Password = Password;
         }
+        internal static Account Create (string Username, string Password) =>
+            new Account { Username = Username, Password = Password };
         public override string ToString () => $"Account Username: {Username}";
     }
 }

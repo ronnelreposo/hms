@@ -1,10 +1,10 @@
-﻿using hms_proto.Core;
-using hms_proto.Extensions;
+﻿using hms_proto.Extensions;
 using hms_proto.Records;
 using System;
 using System.Collections.Generic;
 using System.Data;
 using System.Linq;
+using System.Reactive;
 using System.Threading.Tasks;
 using System.Windows.Forms;
 
@@ -57,7 +57,7 @@ namespace hms_proto.Controller
         {
             var transactCompleted = "Transaction Completed";
             var notReviewed = !IsReviewed;
-            if (notReviewed) { OnCompleted(transactCompleted); return Unit.Unit; }
+            if (notReviewed) { OnCompleted(transactCompleted); return Unit.Default; }
             return OnReviewCompleted(Book.ToString(), transactCompleted);
         } /*end Transact */
     }

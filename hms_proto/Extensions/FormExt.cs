@@ -1,6 +1,5 @@
 ﻿using System.Windows.Forms;
-using hms_proto.Core;
-
+using System.Reactive;
 
 namespace hms_proto.Extensions
 {
@@ -9,17 +8,17 @@ namespace hms_proto.Extensions
         internal static Unit UShowDialog(this Form form)
         {
             form.ShowDialog();
-            return Unit.Unit;
+            return Unit.Default;
         }
         internal static Unit UShow(this Form form)
         {
             form.Show();
-            return Unit.Unit;
+            return Unit.Default;
         }
         internal static Unit UHide(this Form form)
         {
             form.Hide();
-            return Unit.Unit;
+            return Unit.Default;
         }
     }
 }

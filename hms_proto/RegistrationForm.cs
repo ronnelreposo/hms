@@ -2,23 +2,24 @@
 using hms_proto.Records;
 using hms_proto.Utils;
 using System;
+using System.Reactive.Linq;
 using System.Windows.Forms;
 
 namespace hms_proto
 {
     public partial class RegistrationForm : Form
     {
-        private Label[] ErrLabels { get; set; }
-
         public RegistrationForm ()
         {
             InitializeComponent();
 
-            ErrLabels = new[] { errUsername_label, errPassword_label, errConfirmPassword_label };
-            Util.clearLabels(ErrLabels);
-        }
+            var errLabels = new[] { errUsername_label, errPassword_label, errConfirmPassword_label };
 
-        private void reg_button_Click (object sender, EventArgs e) =>
+            var sThisLoad = Observable.FromEventPattern(this, "Load");
+            sThisLoad.Subscribe(_ => Util.clearLabels(errLabels));
+
+            var sRegButtonClick = Observable.FromEventPattern(reg_button, "Click");
+            sRegButtonClick.Subscribe(_ =>
             AccountController.Register(new RegisterControls(
                 ThisForm: this,
                 MainForm: new MainForm(),
@@ -27,7 +28,8 @@ namespace hms_proto
                 ConfirmPasswordField: confirmPassword_tb,
                 UserNameError: errUsername_label,
                 PasswordError: errPassword_label,
-                ConfirmPasswordError: errConfirmPassword_label));
-        /* end register event. */
-    }
+                ConfirmPasswordError: errConfirmPassword_label)));
+
+        } /* end constructor.*/
+    } /* end class.*/
 }

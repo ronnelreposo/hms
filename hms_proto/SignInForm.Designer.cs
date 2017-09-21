@@ -46,7 +46,6 @@
             this.signIn_button.TabIndex = 0;
             this.signIn_button.Text = "Sign In";
             this.signIn_button.UseVisualStyleBackColor = true;
-            this.signIn_button.Click += new System.EventHandler(this.signIn_button_Click);
             // 
             // username_label
             // 
@@ -89,7 +88,6 @@
             this.register_button.TabIndex = 5;
             this.register_button.Text = "Register";
             this.register_button.UseVisualStyleBackColor = true;
-            this.register_button.Click += new System.EventHandler(this.register_button_Click);
             // 
             // errUsername_label
             // 
