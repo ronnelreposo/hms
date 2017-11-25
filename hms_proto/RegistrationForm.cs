@@ -5,6 +5,7 @@ using hms_proto.Extensions;
 using System;
 using System.Reactive.Linq;
 using System.Windows.Forms;
+using System.Reactive.Subjects;
 
 namespace hms_proto
 {
@@ -14,25 +15,25 @@ namespace hms_proto
         {
             InitializeComponent();
 
-            var errLabels = new[] { errUsername_label, errPassword_label, errConfirmPassword_label };
+            Func<string, string> err = str => str.Equals(string.Empty) ? "required" :
+                (str.IsLengthLessThan(6) ? "too short" : string.Empty);
 
-            var sThisLoad = Observable.FromEventPattern(this, "Load");
-            sThisLoad.Subscribe(_ => Util.clearLabels(errLabels));
+            var sUsernameErr = username_tb
+                .StreamStringTextChanged()
+                .Select(err);
 
-            var controls = new RegisterControls(
-                ThisForm: this,
-                MainForm: new MainForm(),
-                UserNameField: username_tb,
-                PasswordField: password_tb,
-                ConfirmPasswordField: confirmPassword_tb,
-                UserNameError: errUsername_label,
-                PasswordError: errPassword_label,
-                ConfirmPasswordError: errConfirmPassword_label);
+            var b = new BehaviorSubject<string>(string.Empty);
+            sUsernameErr.Subscribe(b);
+            b.Subscribe(str => errUsername_label.Text = str);
 
-            var sRegButtonClick = reg_button
-                .StreamClick()
-                .Subscribe(_ => AccountController.Register(controls));
+            var c = new BehaviorSubject<bool>(false);
+            sUsernameErr
+                .Select(str => !str.HasValue())
+                .Subscribe(c);
+            c.Subscribe(enable => password_tb.Enabled = enable);
 
-        } /* end constructor.*/
-    } /* end class.*/
+            
+
+        } /* end constructor. */
+    } /* end class. */
 }
