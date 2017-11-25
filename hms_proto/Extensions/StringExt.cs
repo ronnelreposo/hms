@@ -16,6 +16,7 @@
         /// <param name="threshold"></param>
         /// <returns></returns>
         internal static bool IsLengthLessThan(this string str, int threshold) => str.Length < threshold;
+
         /// <summary>
         /// Determines if the string is niether null or empty.
         /// </summary>
